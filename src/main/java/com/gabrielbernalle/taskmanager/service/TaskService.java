@@ -23,6 +23,15 @@ public class TaskService {
 	public List<Task> getBd() {
 		return bd;
 	}
+	
+	public Task getById(Task task) {
+		for (Task tk : bd) {
+			if(tk.getId().equals(task.getId())) {
+				return tk;
+			}
+		}
+		return null;
+	}
 
 	public void addTask(Task task) {
 		bd.add(task);

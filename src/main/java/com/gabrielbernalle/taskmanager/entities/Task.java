@@ -50,7 +50,7 @@ public class Task {
 		this.status = status;
 	}
 
-	public LocalDateTime getCreationData() {
+	public LocalDateTime getCreationDate() {
 		return creationDate;
 	}
 
