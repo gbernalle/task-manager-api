@@ -2,6 +2,7 @@ package com.gabrielbernalle.taskmanager.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,15 @@ public class TaskService {
 	public Task getById(Task task) {
 		for (Task tk : bd) {
 			if(tk.getId().equals(task.getId())) {
+				return tk;
+			}
+		}
+		return null;
+	}
+	
+	public Task findById(UUID id) {
+		for (Task tk : bd) {
+			if(tk.getId().equals(id)) {
 				return tk;
 			}
 		}
