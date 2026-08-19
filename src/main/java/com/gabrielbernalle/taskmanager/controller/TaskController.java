@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gabrielbernalle.taskmanager.entities.Task;
 import com.gabrielbernalle.taskmanager.service.TaskService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
@@ -35,7 +37,7 @@ public class TaskController {
 	}
 	
 	@PostMapping
-	public Task newTask(@RequestBody Task newTask) {
+	public Task newTask(@Valid @RequestBody Task newTask) {
 		taskService.addTask(newTask);
 		return taskService.findById(newTask.getId());
 	}
@@ -46,7 +48,7 @@ public class TaskController {
 	}
 	
 	@PutMapping("{id}")
-	public Task replaceTask(@RequestBody Task newTask, @PathVariable UUID id) {
+	public Task replaceTask(@Valid @RequestBody Task newTask, @PathVariable UUID id) {
 		Task existingTask = taskService.findById(id);
 		
 		existingTask.setTitle(newTask.getTitle());
@@ -62,7 +64,7 @@ public class TaskController {
 	}
 	
 	@PatchMapping("{id}")
-	public Task updateTask(@RequestBody Task updateStatus, @PathVariable UUID id) {
+	public Task updateTask(@Valid @RequestBody Task updateStatus, @PathVariable UUID id) {
 		Task existingTask = taskService.findById(id);
 		
 		existingTask.setStatus(updateStatus.getStatus());

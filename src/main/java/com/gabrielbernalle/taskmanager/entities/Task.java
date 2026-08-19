@@ -6,8 +6,14 @@ import java.util.UUID;
 
 import com.gabrielbernalle.taskmanager.enums.StatusEnum;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class Task {
 	private UUID id = UUID.randomUUID();
+	
+	@NotBlank(message = "Title cannot be empty")
+	@Size(min = 3, max=20, message="Title must be between 3 and 20 characters")
 	private String title;
 	private String description;
 	private StatusEnum status = StatusEnum.PENDENTE;
