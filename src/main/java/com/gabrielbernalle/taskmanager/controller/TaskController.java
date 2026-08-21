@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gabrielbernalle.taskmanager.dtos.TaskRequestDTO;
+import com.gabrielbernalle.taskmanager.dtos.TaskResponseDTO;
+import com.gabrielbernalle.taskmanager.dtos.TaskStatusRequestDTO;
 import com.gabrielbernalle.taskmanager.entities.Task;
+import com.gabrielbernalle.taskmanager.mapper.TaskMapper;
 import com.gabrielbernalle.taskmanager.service.TaskService;
 
 import jakarta.validation.Valid;
@@ -32,29 +36,37 @@ public class TaskController {
 	
 	
 	@GetMapping
-	public List<Task> allTasks(){
-		return taskService.getBd();
+	public List<TaskResponseDTO> allTasks(){
+		List<Task> allTasks = taskService.getBd();
+		
+		return allTasks.stream()
+				.map(task -> TaskMapper.mapToTaskResponseDTO(task))
+				.toList();
 	}
 	
 	@PostMapping
-	public Task newTask(@Valid @RequestBody Task newTask) {
-		taskService.addTask(newTask);
-		return taskService.findById(newTask.getId());
+	public TaskResponseDTO newTask(@Valid @RequestBody TaskRequestDTO requestDto) {
+		Task taskToSave = TaskMapper.mapToTask(requestDto);
+		Task savedTask = taskService.addTask(taskToSave);
+		
+		return TaskMapper.mapToTaskResponseDTO(savedTask);
 	}
 	
 	@GetMapping("{id}")
-	public Task oneTask(@PathVariable UUID id) {
-		return taskService.findById(id);
+	public TaskResponseDTO oneTask(@PathVariable UUID id) {
+		Task existingTask = taskService.findById(id);
+		
+		return TaskMapper.mapToTaskResponseDTO(existingTask);
 	}
 	
 	@PutMapping("{id}")
-	public Task replaceTask(@Valid @RequestBody Task newTask, @PathVariable UUID id) {
+	public TaskResponseDTO replaceTask(@Valid @RequestBody TaskRequestDTO newTask, @PathVariable UUID id) {
 		Task existingTask = taskService.findById(id);
 		
-		existingTask.setTitle(newTask.getTitle());
-		existingTask.setDescription(newTask.getDescription());
+		existingTask.setTitle(newTask.title());
+		existingTask.setDescription(newTask.description());
 		
-		return existingTask;
+		return TaskMapper.mapToTaskResponseDTO(taskService.addTask(existingTask));
 	}
 	
 	@DeleteMapping("{id}")
@@ -64,13 +76,11 @@ public class TaskController {
 	}
 	
 	@PatchMapping("{id}")
-	public Task updateTask(@Valid @RequestBody Task updateStatus, @PathVariable UUID id) {
+	public TaskResponseDTO updateTask(@Valid @RequestBody TaskStatusRequestDTO updateStatus, @PathVariable UUID id) {
 		Task existingTask = taskService.findById(id);
+		existingTask.setStatus(updateStatus.status());
 		
-		existingTask.setStatus(updateStatus.getStatus());
-		
-		return existingTask;
-		
+		return TaskMapper.mapToTaskResponseDTO(taskService.addTask(existingTask));
 	}
 	
 }

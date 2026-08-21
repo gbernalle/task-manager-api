@@ -6,7 +6,7 @@ A RESTful API built with Java and Spring Boot to manage daily tasks. This projec
 
 *   **CRUD Operations:** Create, Read, Update, and Delete tasks.
 *   **Data Validation:** Prevents empty or invalid data using Spring Boot Validation (`@NotBlank`, `@Size`).
-*   **Global Exception Handling:** Custom `404 Not Found` responses for invalid task IDs using `@ControllerAdvice` and custom exceptions.
+*   **Global Exception Handling:** Custom `404 Not Found` responses for invalid task IDs using custom exceptions.
 *   **Interactive Documentation:** Automated API mapping using Swagger/OpenAPI.
 
 ## Tech Stack

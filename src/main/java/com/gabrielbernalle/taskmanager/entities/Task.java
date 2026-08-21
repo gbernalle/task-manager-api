@@ -6,14 +6,16 @@ import java.util.UUID;
 
 import com.gabrielbernalle.taskmanager.enums.StatusEnum;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity
 public class Task {
-	private UUID id = UUID.randomUUID();
-	
-	@NotBlank(message = "Title cannot be empty")
-	@Size(min = 3, max=20, message="Title must be between 3 and 20 characters")
+	@Id
+	@GeneratedValue(strategy=GenerationType.UUID)
+	private UUID id;
 	private String title;
 	private String description;
 	private StatusEnum status = StatusEnum.PENDENTE;
@@ -26,6 +28,8 @@ public class Task {
 	public Task(String title, String description) {
 		this.title = title;
 		this.description = description;
+		this.status = StatusEnum.PENDENTE;
+	    this.creationDate = LocalDateTime.now();
 	}
 
 	public UUID getId() {
