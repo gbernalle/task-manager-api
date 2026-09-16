@@ -7,9 +7,12 @@ import java.util.UUID;
 import com.gabrielbernalle.taskmanager.enums.StatusEnum;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Task {
@@ -20,6 +23,10 @@ public class Task {
 	private String description;
 	private StatusEnum status = StatusEnum.PENDENTE;
 	private LocalDateTime creationDate = LocalDateTime.now();
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name= "user_id")
+	private User user;
 	
 	public Task() {
 		
@@ -35,7 +42,6 @@ public class Task {
 	public UUID getId() {
 		return id;
 	}
-	
 
 	public void setId(UUID id) {
 		this.id = id;
@@ -69,6 +75,15 @@ public class Task {
 		return creationDate;
 	}
 
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(creationDate, description, id, status, title);

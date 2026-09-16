@@ -1,0 +1,9 @@
+CREATE TABLE users (
+    id BIGSERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) NOT NULL
+);
+
+ALTER TABLE task ADD COLUMN user_id BIGINT;
+ALTER TABLE task ADD CONSTRAINT fk_task_user FOREIGN KEY (user_id) REFERENCES users(id);
