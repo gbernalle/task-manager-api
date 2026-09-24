@@ -37,7 +37,7 @@ public class TaskController {
 	
 	@GetMapping
 	public List<TaskResponseDTO> allTasks(){
-		List<Task> allTasks = taskService.getBd();
+		List<Task> allTasks = taskService.getTasks();
 		
 		return allTasks.stream()
 				.map(task -> TaskMapper.mapToTaskResponseDTO(task))
@@ -46,27 +46,17 @@ public class TaskController {
 	
 	@PostMapping
 	public TaskResponseDTO newTask(@Valid @RequestBody TaskRequestDTO requestDto) {
-		Task taskToSave = TaskMapper.mapToTask(requestDto);
-		Task savedTask = taskService.addTask(taskToSave);
-		
-		return TaskMapper.mapToTaskResponseDTO(savedTask);
+		return TaskMapper.mapToTaskResponseDTO(taskService.addTask(TaskMapper.mapToTask(requestDto)));
 	}
 	
 	@GetMapping("{id}")
 	public TaskResponseDTO oneTask(@PathVariable UUID id) {
-		Task existingTask = taskService.findById(id);
-		
-		return TaskMapper.mapToTaskResponseDTO(existingTask);
+		return TaskMapper.mapToTaskResponseDTO(taskService.findById(id));
 	}
 	
 	@PutMapping("{id}")
 	public TaskResponseDTO replaceTask(@Valid @RequestBody TaskRequestDTO newTask, @PathVariable UUID id) {
-		Task existingTask = taskService.findById(id);
-		
-		existingTask.setTitle(newTask.title());
-		existingTask.setDescription(newTask.description());
-		
-		return TaskMapper.mapToTaskResponseDTO(taskService.addTask(existingTask));
+		return TaskMapper.mapToTaskResponseDTO(taskService.replaceTask(newTask, id));
 	}
 	
 	@DeleteMapping("{id}")
@@ -77,10 +67,7 @@ public class TaskController {
 	
 	@PatchMapping("{id}")
 	public TaskResponseDTO updateTask(@Valid @RequestBody TaskStatusRequestDTO updateStatus, @PathVariable UUID id) {
-		Task existingTask = taskService.findById(id);
-		existingTask.setStatus(updateStatus.status());
-		
-		return TaskMapper.mapToTaskResponseDTO(taskService.addTask(existingTask));
+		return TaskMapper.mapToTaskResponseDTO(taskService.updateTask(updateStatus,id));
 	}
 	
 }
